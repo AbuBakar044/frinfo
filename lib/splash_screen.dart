@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frinfo/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -8,6 +9,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Color indicatorColor = Colors.black;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,17 +58,16 @@ class _SplashScreenState extends State<SplashScreen> {
                 ],
               ),
             ),
-           const Positioned(
+            Positioned(
               bottom: 20.0,
               left: 0,
               right: 0,
               child: Center(
                 child: CircularProgressIndicator(
-                  color: Colors.black,
+                  color: indicatorColor,
                 ),
               ),
             )
-            
           ],
         ),
       ),
