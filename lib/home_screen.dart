@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frinfo/add_friends_screen.dart';
 import 'package:frinfo/colors.dart';
+import 'package:frinfo/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: greenColor,
-        onPressed: () {},
+        onPressed: () {
+          goNextScreen(context, const AddFriendsScreen());
+        },
         child: const Icon(
           Icons.add,
           color: whiteColor,
