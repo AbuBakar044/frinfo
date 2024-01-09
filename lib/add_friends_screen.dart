@@ -20,7 +20,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           onPressed: () {
             removeRoute(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: whiteColor,
           ),
@@ -40,15 +40,20 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           padding: const EdgeInsets.all(20.0),
           child: ListView(
             children: [
-              CircleAvatar(
-                radius: 65.0,
-                backgroundColor: Colors.amber,
+              InkWell(
+                onTap: () {
+                  showSheet();
+                },
+                child: const CircleAvatar(
+                  radius: 65.0,
+                  backgroundColor: Colors.amber,
+                ),
               ),
               const SizedBox(
                 height: 30.0,
               ),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Add Name',
                   border: OutlineInputBorder(),
                 ),
@@ -58,7 +63,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               ),
               TextFormField(
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), hintText: 'Add Number'),
               ),
               const SizedBox(
@@ -66,7 +71,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               ),
               TextFormField(
                 maxLines: 10,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), hintText: 'Add Description'),
               ),
               const SizedBox(
@@ -74,11 +79,11 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               ),
               ElevatedButton(
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   'Save',
                   style: TextStyle(color: whiteColor),
                 ),
-                style: ButtonStyle(
+                style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(
                     greenColor,
                   ),
@@ -89,5 +94,86 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
       ),
     );
+  }
+
+  showSheet() {
+    return showModalBottomSheet(
+        context: context,
+        backgroundColor: greenColor,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.sizeOf(context).height / 4,
+            width: MediaQuery.sizeOf(context).width,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  const Text(
+                    'Choose Picture From',
+                    style: TextStyle(
+                      color: whiteColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.camera,
+                                size: 34,
+                                color: whiteColor,
+                              ),
+                            ),
+                            const Text(
+                              'Camera',
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 30.0,
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.album,
+                                size: 34,
+                                color: whiteColor,
+                              ),
+                            ),
+                            const Text(
+                              'Gallery',
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
