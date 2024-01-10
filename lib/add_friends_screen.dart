@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frinfo/colors.dart';
 import 'package:frinfo/routes.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddFriendsScreen extends StatefulWidget {
   const AddFriendsScreen({super.key});
@@ -10,6 +12,7 @@ class AddFriendsScreen extends StatefulWidget {
 }
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
+  Uint8List? friendImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +23,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           onPressed: () {
             removeRoute(context);
           },
-          icon: const Icon(
+          icon:  const Icon(
             Icons.arrow_back,
             color: whiteColor,
           ),
@@ -44,9 +47,12 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                 onTap: () {
                   showSheet();
                 },
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 65.0,
                   backgroundColor: Colors.amber,
+                  backgroundImage: friendImage == null
+                      ? const AssetImage('assets/images/logo.jpg')
+                      : MemoryImage(friendImage!) as ImageProvider,
                 ),
               ),
               const SizedBox(
@@ -127,7 +133,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         Column(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                pickImage(ImageSource.camera);
+                              },
                               icon: const Icon(
                                 Icons.camera,
                                 size: 34,
@@ -150,7 +158,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         Column(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                pickImage(ImageSource.gallery);
+                              },
                               icon: const Icon(
                                 Icons.album,
                                 size: 34,
@@ -175,5 +185,19 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
             ),
           );
         });
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    XFile? choosedImage = await ImagePicker().pickImage(source: source);
+
+    if (choosedImage == null) {
+      return;
+    } else {
+      friendImage = await choosedImage.readAsBytes();
+      setState(() {});
+
+      print('.........................$friendImage');
+      removeRoute(context);
+    }
   }
 }

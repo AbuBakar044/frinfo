@@ -1,6 +1,7 @@
 # frinfo
 
 A new Flutter project.
+This is ABout Friends
 
 ## Getting Started
 
