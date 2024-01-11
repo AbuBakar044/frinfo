@@ -13,6 +13,8 @@ class AddFriendsScreen extends StatefulWidget {
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Uint8List? friendImage;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           onPressed: () {
             removeRoute(context);
           },
-          icon:  const Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: whiteColor,
           ),
@@ -41,61 +43,91 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         width: MediaQuery.sizeOf(context).width,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: ListView(
-            children: [
-              InkWell(
-                onTap: () {
-                  showSheet();
-                },
-                child: CircleAvatar(
-                  radius: 65.0,
-                  backgroundColor: Colors.amber,
-                  backgroundImage: friendImage == null
-                      ? const AssetImage('assets/images/logo.jpg')
-                      : MemoryImage(friendImage!) as ImageProvider,
-                ),
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Add Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Add Number'),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                maxLines: 10,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Add Description'),
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  'Save',
-                  style: TextStyle(color: whiteColor),
-                ),
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(
-                    greenColor,
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                InkWell(
+                  onTap: () {
+                    showSheet();
+                  },
+                  child: CircleAvatar(
+                    radius: 65.0,
+                    backgroundColor: Colors.amber,
+                    backgroundImage: friendImage == null
+                        ? const AssetImage('assets/images/logo.jpg')
+                        : MemoryImage(friendImage!) as ImageProvider,
                   ),
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 30.0,
+                ),
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '*please fill this field';
+                    }
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: const InputDecoration(
+                    hintText: 'Add Name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value!.isEmpty ||
+                        value.length < 11 ||
+                        value.length > 11 ||
+                        !value.startsWith('03')) {
+                      return '*please correctly fill this field';
+                    }
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), hintText: 'Add Number'),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                TextFormField(
+                  maxLines: 10,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '*please fill this field';
+                    }
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Add Description'),
+                ),
+                const SizedBox(
+                  height: 40.0,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Form Submitted successfully!')));
+                    }
+                  },
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: whiteColor),
+                  ),
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                      greenColor,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -187,6 +219,20 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         });
   }
 
+  // Future<void> pickImage(ImageSource source) async {
+  //   XFile? choosedImage = await ImagePicker().pickImage(source: source);
+
+  //   if (choosedImage == null) {
+  //     return;
+  //   } else {
+  //     friendImage = await choosedImage.readAsBytes();
+  //     setState(() {});
+
+  //     print('.........................$friendImage');
+  //     removeRoute(context);
+  //   }
+  // }
+
   Future<void> pickImage(ImageSource source) async {
     XFile? choosedImage = await ImagePicker().pickImage(source: source);
 
@@ -195,8 +241,6 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
     } else {
       friendImage = await choosedImage.readAsBytes();
       setState(() {});
-
-      print('.........................$friendImage');
       removeRoute(context);
     }
   }
