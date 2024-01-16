@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+part 'friend_model.g.dart';
+
 @HiveType(typeId: 0)
 class FriendModel {
   @HiveField(0)
