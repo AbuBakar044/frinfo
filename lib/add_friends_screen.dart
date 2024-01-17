@@ -16,6 +16,9 @@ class AddFriendsScreen extends StatefulWidget {
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Uint8List? friendImage;
   final formKey = GlobalKey<FormState>();
+
+
+  //Generated controllers to control texts in textformfields
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final descController = TextEditingController();
@@ -263,6 +266,8 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       desc: descController.text,
     );
 
+
+    //Opened box in hive to save freinds
     var friendBox = await Hive.openBox<FriendModel>('friends');
 
     await friendBox.add(friendModel).then(

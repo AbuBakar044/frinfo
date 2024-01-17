@@ -17,8 +17,6 @@ class FriendModel {
   @HiveField(3)
   String? desc;
 
-
-
   //Constructor
   FriendModel({
     this.image,

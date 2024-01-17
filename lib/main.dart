@@ -9,11 +9,19 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory directory = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(directory.path);
-  print('.............This is the folder path ${directory.path}');
+
+  ///This will create directory(Folder) at Application Document Directory
+  //Directory directory = await getApplicationDocumentsDirectory();
+
+  //Initialize Hive
+  await Hive.initFlutter();
+
+  //Register Hive Adapter to convert data into bytes
   Hive.registerAdapter(FriendModelAdapter());
+
+  //Open friends box to save friends of type FriendModel
   await Hive.openBox<FriendModel>('friends');
+  
   runApp(const MyApp());
 }
 
