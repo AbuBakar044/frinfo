@@ -17,7 +17,7 @@ void main() async {
   await Hive.initFlutter();
 
   //Register Hive Adapter to convert data into bytes
-  Hive.registerAdapter(FriendModelAdapter());
+  Hive.registerAdapter<FriendModel>(FriendModelAdapter());
 
   //Open friends box to save friends of type FriendModel
   await Hive.openBox<FriendModel>('friends');

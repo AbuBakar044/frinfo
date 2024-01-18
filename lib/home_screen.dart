@@ -15,10 +15,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   //An empty friends list
   List<FriendModel> friendList = [];
+  Box<FriendModel>? friendsBox;
 
   @override
   void initState() {
-    getFriendsFromDatabase();
+    friendsBox = Hive.box<FriendModel>('friends');
+    //getFriendsFromDatabase();
     super.initState();
   }
 
@@ -45,53 +47,70 @@ class _HomeScreenState extends State<HomeScreen> {
           color: whiteColor,
         ),
       ),
-      body:
-
-          // const Center(
-          //   child: Text(
-          //     "You don't have any friends\npress (+) button to add one!",
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
-          ListView.builder(
-        itemCount: friendList.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              tileColor: Colors.green,
-              leading: CircleAvatar(
-                backgroundImage: MemoryImage(friendList[index].image!),
+      body: friendList.isEmpty
+          ? const Center(
+              child: Text(
+                "You don't have any friends\npress (+) button to add one!",
+                textAlign: TextAlign.center,
               ),
-              title: Text(
-                friendList[index].name!,
-                style: const TextStyle(
-                  color: whiteColor,
-                ),
-              ),
-              subtitle: Text(
-                friendList[index].number!,
-                style: const TextStyle(
-                  color: whiteColor,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+            )
+          : ValueListenableBuilder(
+              valueListenable: friendsBox!.listenable(),
+              builder: (context, _, __) {
+                friendList = friendsBox!.values.toList().cast<FriendModel>();
+                return ListView.builder(
+                  itemCount: friendList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        tileColor: Colors.green,
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              MemoryImage(friendList[index].image!),
+                        ),
+                        title: Text(
+                          friendList[index].name!,
+                          style: const TextStyle(
+                            color: whiteColor,
+                          ),
+                        ),
+                        subtitle: Text(
+                          friendList[index].number!,
+                          style: const TextStyle(
+                            color: whiteColor,
+                          ),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              deleteFriend(index);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: whiteColor,
+                            )),
+                      ),
+                    );
+                  },
+                );
+              }),
     );
   }
 
-  //Function to get friends from Hive Database
-  Future<void> getFriendsFromDatabase() async {
+  // //Function to get friends from Hive Database
+  // Future<void> getFriendsFromDatabase() async {
+  //   //Accessed the box of Friends
 
-    //Accessed the box of Friends
-    Box<FriendModel> friendsBox = Hive.box<FriendModel>('friends');
+  //   //Converted all the box values to list and assigned them to our list
+  //   friendList = friendsBox!.values.toList().cast<FriendModel>();
 
-    //Converted all the box values to list and assigned them to our list
-    friendList = friendsBox.values.toList().cast<FriendModel>();
+  //   //Change Screen state to show data
+  //   setState(() {});
+  // }
 
-    //Change Screen state to show data
+  Future<void> deleteFriend(int index) async {
+    friendList.removeAt(index);
+    await friendsBox!.deleteAt(index);
     setState(() {});
   }
 }
