@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:frinfo/model/friend_model.dart';
 import 'package:frinfo/splash_screen.dart';

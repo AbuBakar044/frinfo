@@ -3,6 +3,7 @@ import 'package:frinfo/add_friends_screen.dart';
 import 'package:frinfo/colors.dart';
 import 'package:frinfo/model/friend_model.dart';
 import 'package:frinfo/routes.dart';
+import 'package:frinfo/view_friend_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -66,6 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
                             tileColor: Colors.green,
+                            onTap: () {
+                              goNextScreen(
+                                  context,
+                                  ViewFriendScreen(
+                                      friendName: friendList[index].name!,
+                                      friendNumber: friendList[index].number!,
+                                      friendDesc: friendList[index].desc!,
+                                      friendImage: friendList[index].image!));
+                            },
                             onLongPress: () {
                               callMyFriend(friendList[index].number!);
                             },
